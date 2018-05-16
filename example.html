@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>萤火钱包DAPP Demo</title>
+</head>
+<body>
+  
+  <div class="main">
+    <div>
+      地址：<span id="address"></span>
+    </div>
+    <div>
+      <button onclick="doSign()" id="btn_sign">签名</button>
+    </div>
+    <div>
+      签名结果：<span id="sign_result"></span>
+    </div>
+  </div>
+
+    <script>
+      var _address = null
+      function doSign(){
+        if(!_address){
+          alert('请使用萤火钱包打开界面');
+          return;
+        }
+        alert('--开始签名---')
+        window.FFW.sign(JSON.stringify({name:'demo'}), function(response){
+          if(response.code === 'fail'){
+            alert('签名失败！错误信息：'+response.message)
+            return
+          }
+          alert('签名成功！')
+          document.getElementById('sign_result').innerText = response.data
+        })
+      }
+      let instance = setTimeout(function(){
+        if(window.FFW){
+          _address = window.FFW.address
+          document.getElementById('address').innerText = _address
+          clearTimeout(instance)
+        }
+      },300)
+    </script>
+</body>
+</html>
